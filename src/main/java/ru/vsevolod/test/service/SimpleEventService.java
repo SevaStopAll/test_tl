@@ -42,4 +42,11 @@ public class SimpleEventService implements EventService {
 
         return eventRepository.findAll(plantPage);
     }
+
+    public Page<Event> getAllByCategoryEventPage(@NonNull PageSettings pageSetting, Category category) {
+        Sort plantSort = pageSetting.buildSort();
+        Pageable plantPage = PageRequest.of(pageSetting.getPage(), pageSetting.getElementPerPage(), plantSort);
+
+        return eventRepository.findAllByCategory(category);
+    }
 }

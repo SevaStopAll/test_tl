@@ -2,6 +2,7 @@ package ru.vsevolod.test.service;
 
 import lombok.NonNull;
 import org.springframework.data.domain.Page;
+import ru.vsevolod.test.entity.Category;
 import ru.vsevolod.test.entity.Event;
 import ru.vsevolod.test.entity.PageSettings;
 
@@ -14,5 +15,7 @@ public interface EventService {
     Optional<Event> getById(Long id);
 
     Page<Event> getEventPage(@NonNull PageSettings pageSetting);
+
+    Page<Event> getAllByCategoryEventPage(@NonNull PageSettings pageSetting, Category category);
 
 }

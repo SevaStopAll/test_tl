@@ -9,12 +9,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import ru.vsevolod.test.entity.Category;
 import ru.vsevolod.test.entity.Event;
 import ru.vsevolod.test.entity.PageSettings;
+import ru.vsevolod.test.repository.CategoryRepository;
 import ru.vsevolod.test.repository.EventRepository;
 
-import java.util.List;
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Service
@@ -24,6 +24,7 @@ import java.util.Optional;
 public class SimpleEventService implements EventService {
 
     private EventRepository eventRepository;
+    private CategoryRepository categoryRepository;
 
     @Override
     public Optional<Event> create(Event event) {
@@ -36,17 +37,23 @@ public class SimpleEventService implements EventService {
     }
 
 
-    public Page<Event> getEventPage(@NonNull PageSettings pageSetting) {
+    public Page<Event> getAll(@NonNull PageSettings pageSetting) {
         Sort plantSort = pageSetting.buildSort();
         Pageable plantPage = PageRequest.of(pageSetting.getPage(), pageSetting.getElementPerPage(), plantSort);
-
         return eventRepository.findAll(plantPage);
     }
 
-    public Page<Event> getAllByCategoryEventPage(@NonNull PageSettings pageSetting, Category category) {
+    public Page<Event> getAllByCategory(@NonNull PageSettings pageSetting, String categoryName) {
         Sort plantSort = pageSetting.buildSort();
         Pageable plantPage = PageRequest.of(pageSetting.getPage(), pageSetting.getElementPerPage(), plantSort);
 
-        return eventRepository.findAllByCategory(category);
+        return eventRepository.findAllByCategory(categoryRepository.findCategoryByName(categoryName).get());
+    }
+
+    public Page<Event> getAllByDate(@NonNull PageSettings pageSetting, LocalDate date) {
+        Sort plantSort = pageSetting.buildSort();
+        Pageable plantPage = PageRequest.of(pageSetting.getPage(), pageSetting.getElementPerPage(), plantSort);
+
+        return eventRepository.findAllByTimeOfCreationContaining(date);
     }
 }

@@ -5,13 +5,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import ru.vsevolod.test.entity.Event;
 import ru.vsevolod.test.entity.PageSettings;
 import ru.vsevolod.test.service.EventService;
+
+import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
@@ -24,7 +23,7 @@ public class EventController {
 
     @GetMapping("/all")
     public Page<Event> getAllEvents() {
-        return eventService.getEventPage(pageSetting);
+        return eventService.getAll(pageSetting);
     }
 
     @PostMapping("/create")
@@ -32,4 +31,17 @@ public class EventController {
         eventService.create(event);
         return "redirect: /";
     }
+
+    @GetMapping("/{category}")
+    public Page<Event> getAllByCategory(@PathVariable String category) {
+        return eventService.getAllByCategory(pageSetting, category);
+    }
+
+    @GetMapping("/{date}}")
+    public Page<Event> getAllByDate(@PathVariable String date) {
+        LocalDate targetDate = LocalDate.parse(date);
+        return eventService.getAllByDate(pageSetting, targetDate);
+    }
+
+
 }

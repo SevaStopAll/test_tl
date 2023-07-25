@@ -7,9 +7,12 @@ import org.springframework.stereotype.Repository;
 import ru.vsevolod.test.entity.Category;
 import ru.vsevolod.test.entity.Event;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
 public interface EventRepository extends PagingAndSortingRepository<Event, Long>, CrudRepository<Event, Long> {
     Page<Event> findAllByCategory(Category category);
+
+    Page<Event> findAllByTimeOfCreationContaining(LocalDate localDate);
 }
